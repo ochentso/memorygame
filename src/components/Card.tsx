@@ -1,17 +1,49 @@
-import { useState } from "react";
-import { StarIcon } from "../assets/StarIcon";
+import { useContext, useEffect, useId, useState } from "react";
+import { useFlippedStore, useHiddenStore } from "../App";
 
-export const Card = () => {
-  const [isFlipped, setIsFlipped] = useState(false);
+interface ICardProps {
+  itemIndex: number;
+  isHiddenArr?: string[];
+  src: string;
+  pictureId: string;
+}
+
+export const Card = ({
+  itemIndex,
+  src,
+  isHiddenArr,
+  pictureId,
+}: ICardProps) => {
+  const cardId = useId();
+
+  const addFlippedCards = useFlippedStore((state) => state.addFlippedCards);
+  const flippedCards = useFlippedStore((state) => state.flippedCards);
+
+  const foundFlippedCard = flippedCards?.find(
+    (card) => card.index === itemIndex
+  );
+  const isFlipped = foundFlippedCard ? true : false;
+
+  const hiddenCards = useHiddenStore((state) => state.hiddenCards);
+
+  const foundHiddenCard = hiddenCards?.find((card) => card.index === itemIndex);
+  const isHidden = foundHiddenCard ? true : false;
+
   const handleClick = () => {
-    setIsFlipped(!isFlipped);
+    if (flippedCards.length > 1) return;
+    addFlippedCards({
+      index: itemIndex,
+      pictureId: pictureId,
+    });
   };
 
   return (
     <button
       type="button"
       onClick={handleClick}
-      className="relative [perspective:1000px] w-auto h-24 md:h-36 lg:h-48"
+      className={`${
+        isHidden ? "invisible" : "visible"
+      } relative [perspective:1000px] w-auto h-24 md:h-36 lg:h-48`}
     >
       <div
         className="absolute inset-0 w-full h-full transition-transform ease-in-out delay-200 duration-500 [transformStyle:preserve-3d]"
@@ -23,7 +55,7 @@ export const Card = () => {
           <span>back</span>
         </div>
         <div className="absolute inset-0 bg-violet-200 h-full w-full rounded-xl [backfaceVisibility:hidden] [transform:rotateY(180deg)] px-2 py-4">
-          <StarIcon />
+          <img src={src} alt="" />
         </div>
       </div>
     </button>

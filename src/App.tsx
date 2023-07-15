@@ -4,8 +4,18 @@ import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { RestartButton } from "./components/RestartButton";
 import { TimeCounter } from "./components/TimeCounter";
-import froggoUrl from "./assets/froggo.png";
-import reactLogo from "./assets/react.svg";
+import lightning from "./assets/lightning.png";
+import leaf from "./assets/leaf.png";
+import star from "./assets/star.png";
+import heart from "./assets/heart.png";
+import cloud from "./assets/cloud.png";
+import flower from "./assets/flower.png";
+import fish from "./assets/fish.png";
+import anchor from "./assets/anchor.png";
+import diamond from "./assets/diamond.png";
+import moon from "./assets/moon.png";
+import fire from "./assets/fire.png";
+import sun from "./assets/sun.png";
 import { create } from "zustand";
 
 interface ICard {
@@ -41,19 +51,56 @@ function App() {
   const cards = [
     {
       pictureId: "1",
-      src: froggoUrl,
+      src: lightning,
     },
     {
       pictureId: "2",
-      src: "/vite.svg",
+      src: heart,
     },
     {
       pictureId: "3",
-      src: reactLogo,
+      src: leaf,
+    },
+    {
+      pictureId: "4",
+      src: star,
+    },
+    {
+      pictureId: "5",
+      src: cloud,
+    },
+    {
+      pictureId: "6",
+      src: flower,
+    },
+    {
+      pictureId: "7",
+      src: fish,
+    },
+    {
+      pictureId: "8",
+      src: anchor,
+    },
+    {
+      pictureId: "9",
+      src: diamond,
+    },
+    {
+      pictureId: "10",
+      src: moon,
+    },
+    {
+      pictureId: "11",
+      src: fire,
+    },
+    {
+      pictureId: "12",
+      src: sun,
     },
   ];
 
   const cardsDuplicate = cards.concat(cards);
+  const shuffledCards = cardsDuplicate.sort(() => Math.random() - 0.5);
 
   const resetFlippedCards = useFlippedStore((state) => state.resetFlippedCards);
   const flippedCards = useFlippedStore((state) => state.flippedCards);

@@ -31,6 +31,7 @@ export const Card = ({
 
   const handleClick = () => {
     if (flippedCards.length > 1) return;
+    if (flippedCards.find((card) => card.index === itemIndex)) return;
     addFlippedCards({
       index: itemIndex,
       pictureId: pictureId,
@@ -51,11 +52,9 @@ export const Card = ({
           transform: isFlipped ? "rotateY( 180deg )" : "rotateY(0)",
         }}
       >
-        <div className="absolute inset-0 bg-cardBack h-full w-full rounded-xl [backfaceVisibility:hidden] px-2 py-4">
-          <span>back</span>
-        </div>
+        <div className="absolute inset-0 bg-cardBack h-full w-full rounded-xl [backfaceVisibility:hidden] px-2 py-4"></div>
         <div className="absolute inset-0 bg-violet-200 h-full w-full rounded-xl [backfaceVisibility:hidden] [transform:rotateY(180deg)] px-2 py-4">
-          <img src={src} alt="" />
+          <img src={src} alt="" className="object-contain w-full h-full" />
         </div>
       </div>
     </button>

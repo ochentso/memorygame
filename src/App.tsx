@@ -38,88 +38,89 @@ export const useFlippedStore = create<IFlippedStore>((set) => ({
 
 interface IHiddenStore {
   hiddenCards: ICard[];
-  addHiddenCards: (card: ICard) => void;
+  addHiddenCard: (card: ICard) => void;
 }
 
 export const useHiddenStore = create<IHiddenStore>((set) => ({
   hiddenCards: [],
-  addHiddenCards: (card) =>
+  addHiddenCard: (card) =>
     set((state) => ({ hiddenCards: [...state.hiddenCards, card] })),
 }));
 
+const cards = [
+  {
+    pictureId: "a",
+    src: lightning,
+  },
+  {
+    pictureId: "b",
+    src: heart,
+  },
+  {
+    pictureId: "c",
+    src: leaf,
+  },
+  {
+    pictureId: "d",
+    src: star,
+  },
+  {
+    pictureId: "e",
+    src: cloud,
+  },
+  {
+    pictureId: "f",
+    src: flower,
+  },
+  {
+    pictureId: "g",
+    src: fish,
+  },
+  {
+    pictureId: "h",
+    src: anchor,
+  },
+  {
+    pictureId: "i",
+    src: diamond,
+  },
+  {
+    pictureId: "j",
+    src: moon,
+  },
+  {
+    pictureId: "k",
+    src: fire,
+  },
+  {
+    pictureId: "l",
+    src: sun,
+  },
+];
+
+const cardsDuplicate = cards.concat(cards);
+const shuffledCards = cardsDuplicate.sort(() => Math.random() - 0.5);
+
 function App() {
-  const cards = [
-    {
-      pictureId: "1",
-      src: lightning,
-    },
-    {
-      pictureId: "2",
-      src: heart,
-    },
-    {
-      pictureId: "3",
-      src: leaf,
-    },
-    {
-      pictureId: "4",
-      src: star,
-    },
-    {
-      pictureId: "5",
-      src: cloud,
-    },
-    {
-      pictureId: "6",
-      src: flower,
-    },
-    {
-      pictureId: "7",
-      src: fish,
-    },
-    {
-      pictureId: "8",
-      src: anchor,
-    },
-    {
-      pictureId: "9",
-      src: diamond,
-    },
-    {
-      pictureId: "10",
-      src: moon,
-    },
-    {
-      pictureId: "11",
-      src: fire,
-    },
-    {
-      pictureId: "12",
-      src: sun,
-    },
-  ];
-
-  const cardsDuplicate = cards.concat(cards);
-  const shuffledCards = cardsDuplicate.sort(() => Math.random() - 0.5);
-
   const resetFlippedCards = useFlippedStore((state) => state.resetFlippedCards);
   const flippedCards = useFlippedStore((state) => state.flippedCards);
-  const addHiddenCards = useHiddenStore((state) => state.addHiddenCards);
+  const addHiddenCard = useHiddenStore((state) => state.addHiddenCard);
+  const hiddenCards = useHiddenStore((state) => state.hiddenCards);
 
   const compareFlippedCards = () => {
     if (flippedCards.length > 1) {
       const firstCard = flippedCards[0];
       const secondCard = flippedCards[1];
       if (firstCard.pictureId === secondCard.pictureId) {
-        console.log("match");
         setTimeout(() => {
-          addHiddenCards(firstCard);
-          addHiddenCards(secondCard);
-        }, 1000);
+          addHiddenCard(firstCard);
+          addHiddenCard(secondCard);
+          hiddenCards.length + 2 === shuffledCards.length && alert("You won!");
+        }, 500);
       }
       setTimeout(() => {
         resetFlippedCards();
-      }, 1000);
+      }, 800);
     }
   };
 
@@ -135,7 +136,7 @@ function App() {
         <TimeCounter />
       </div>
       <div className="px-7 md:px-9 grid grid-cols-4 md:grid-cols-6 gap-2 md:gap-3">
-        {cardsDuplicate.map((card, index) => (
+        {shuffledCards.map((card, index) => (
           <Card
             key={card.pictureId + index}
             itemIndex={index}

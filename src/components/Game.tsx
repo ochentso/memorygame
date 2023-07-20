@@ -1,0 +1,90 @@
+import { useEffect } from "react";
+import { Card } from "./Card";
+import { create } from "zustand";
+
+interface ICard {
+  index: number;
+  pictureId: string;
+}
+
+interface IFlippedStore {
+  flippedCards: ICard[];
+  addFlippedCards: (card: ICard) => void;
+  resetFlippedCards: () => void;
+}
+
+export const useFlippedStore = create<IFlippedStore>((set) => ({
+  flippedCards: [],
+  addFlippedCards: (card) =>
+    set((state) => ({ flippedCards: [...state.flippedCards, card] })),
+  resetFlippedCards: () => set(() => ({ flippedCards: [] })),
+}));
+
+interface IHiddenStore {
+  hiddenCards: ICard[];
+  addHiddenCard: (card: ICard) => void;
+  resetHiddenCards: () => void;
+}
+
+export const useHiddenStore = create<IHiddenStore>((set) => ({
+  hiddenCards: [],
+  addHiddenCard: (card) =>
+    set((state) => ({ hiddenCards: [...state.hiddenCards, card] })),
+  resetHiddenCards: () => set(() => ({ hiddenCards: [] })),
+}));
+
+interface IGameProps {
+  //   gameStarted: boolean;
+  //   setGameStarted: (value: boolean) => void;
+  cardsArr: {
+    pictureId: string;
+    src: string;
+  }[];
+}
+
+export const Game: React.FC<IGameProps> = ({
+  cardsArr,
+  //   gameStarted,
+  //   setGameStarted,
+}) => {
+  const resetFlippedCards = useFlippedStore((state) => state.resetFlippedCards);
+  const flippedCards = useFlippedStore((state) => state.flippedCards);
+  const addHiddenCard = useHiddenStore((state) => state.addHiddenCard);
+  const hiddenCards = useHiddenStore((state) => state.hiddenCards);
+
+  const compareFlippedCards = () => {
+    // if (!gameStarted && !!flippedCards.length) setGameStarted(true);
+    if (flippedCards.length > 1) {
+      const firstCard = flippedCards[0];
+      const secondCard = flippedCards[1];
+      if (firstCard.pictureId === secondCard.pictureId) {
+        setTimeout(() => {
+          addHiddenCard(firstCard);
+          addHiddenCard(secondCard);
+          hiddenCards.length + 2 === cardsArr.length && alert("You won!");
+        }, 500);
+      }
+      setTimeout(() => {
+        resetFlippedCards();
+      }, 800);
+    }
+  };
+
+  useEffect(() => {
+    compareFlippedCards();
+    console.log("flipped cards changed");
+  }, [flippedCards]);
+
+  return (
+    <div className="px-7 md:px-9 grid grid-cols-4 md:grid-cols-6 gap-2 md:gap-3">
+      {cardsArr.map((card, index) => (
+        <Card
+          key={card.pictureId + index}
+          itemIndex={index}
+          src={card.src}
+          pictureId={card.pictureId}
+        />
+      ))}
+    </div>
+  );
+};

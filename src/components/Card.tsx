@@ -1,21 +1,12 @@
-import { useContext, useEffect, useId, useState } from "react";
-import { useFlippedStore, useHiddenStore } from "../App";
+import { useFlippedStore, useHiddenStore } from "./Game";
 
 interface ICardProps {
   itemIndex: number;
-  isHiddenArr?: string[];
   src: string;
   pictureId: string;
 }
 
-export const Card = ({
-  itemIndex,
-  src,
-  isHiddenArr,
-  pictureId,
-}: ICardProps) => {
-  const cardId = useId();
-
+export const Card = ({ itemIndex, src, pictureId }: ICardProps) => {
   const addFlippedCards = useFlippedStore((state) => state.addFlippedCards);
   const flippedCards = useFlippedStore((state) => state.flippedCards);
 
@@ -52,7 +43,9 @@ export const Card = ({
           transform: isFlipped ? "rotateY( 180deg )" : "rotateY(0)",
         }}
       >
-        <div className="absolute inset-0 bg-cardBack hover:bg-[#CAA5AF] active:bg-[#C992A9] transition-colors ease-in-out duration-200 h-full w-full rounded-xl [backfaceVisibility:hidden] px-2 py-4"></div>
+        <div className="absolute inset-0 bg-cardBack hover:bg-[#CAA5AF] active:bg-[#C992A9] transition-colors ease-in-out duration-200 h-full w-full rounded-xl [backfaceVisibility:hidden] px-2 py-4">
+          {pictureId}
+        </div>
         <div className="absolute inset-0 bg-violet-200 h-full w-full rounded-xl [backfaceVisibility:hidden] [transform:rotateY(180deg)] px-2 py-4">
           <img src={src} alt="" className="object-contain w-full h-full" />
         </div>

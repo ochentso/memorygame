@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Card } from "./Card";
 import { create } from "zustand";
+import { useGameStore } from "../App";
 
 interface ICard {
   index: number;
@@ -34,26 +35,22 @@ export const useHiddenStore = create<IHiddenStore>((set) => ({
 }));
 
 interface IGameProps {
-  //   gameStarted: boolean;
-  //   setGameStarted: (value: boolean) => void;
   cardsArr: {
     pictureId: string;
     src: string;
   }[];
 }
 
-export const Game: React.FC<IGameProps> = ({
-  cardsArr,
-  //   gameStarted,
-  //   setGameStarted,
-}) => {
+export const Game: React.FC<IGameProps> = ({ cardsArr }) => {
   const resetFlippedCards = useFlippedStore((state) => state.resetFlippedCards);
   const flippedCards = useFlippedStore((state) => state.flippedCards);
   const addHiddenCard = useHiddenStore((state) => state.addHiddenCard);
   const hiddenCards = useHiddenStore((state) => state.hiddenCards);
+  const setGameStarted = useGameStore((state) => state.setGameStarted);
+  const gameStarted = useGameStore((state) => state.gameStarted);
 
   const compareFlippedCards = () => {
-    // if (!gameStarted && !!flippedCards.length) setGameStarted(true);
+    if (!gameStarted && !!flippedCards.length) setGameStarted(true);
     if (flippedCards.length > 1) {
       const firstCard = flippedCards[0];
       const secondCard = flippedCards[1];

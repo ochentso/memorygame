@@ -48,6 +48,8 @@ export const Game: React.FC<IGameProps> = ({ cardsArr }) => {
   const hiddenCards = useHiddenStore((state) => state.hiddenCards);
   const setGameStarted = useGameStore((state) => state.setGameStarted);
   const gameStarted = useGameStore((state) => state.gameStarted);
+  const setGameFinished = useGameStore((state) => state.setGameFinished);
+  // const gameFinished = useGameStore((state) => state.gameFinished);
 
   const compareFlippedCards = () => {
     if (!gameStarted && !!flippedCards.length) setGameStarted(true);
@@ -58,7 +60,10 @@ export const Game: React.FC<IGameProps> = ({ cardsArr }) => {
         setTimeout(() => {
           addHiddenCard(firstCard);
           addHiddenCard(secondCard);
-          hiddenCards.length + 2 === cardsArr.length && alert("You won!");
+          if (hiddenCards.length + 2 === cardsArr.length) {
+            setGameFinished(true);
+            alert("You won!");
+          }
         }, 500);
       }
       setTimeout(() => {
@@ -69,7 +74,6 @@ export const Game: React.FC<IGameProps> = ({ cardsArr }) => {
 
   useEffect(() => {
     compareFlippedCards();
-    console.log("flipped cards changed");
   }, [flippedCards]);
 
   return (

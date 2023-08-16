@@ -14,11 +14,15 @@ const picsShuffled = picsDuplicate.sort(() => Math.random() - 0.5);
 interface IGameStore {
   gameStarted: boolean;
   setGameStarted: (value: boolean) => void;
+  gameFinished: boolean;
+  setGameFinished: (value: boolean) => void;
 }
 
 export const useGameStore = create<IGameStore>((set) => ({
   gameStarted: false,
   setGameStarted: (value) => set(() => ({ gameStarted: value })),
+  gameFinished: false,
+  setGameFinished: (value) => set(() => ({ gameFinished: value })),
 }));
 
 const useTimerStore = create<ITimerStore>((set) => ({
@@ -35,11 +39,15 @@ interface ITimerStore {
 
 function App() {
   const [cards, setCards] = useState(picsShuffled);
+  const [bestTime, setBestTime] = useState(
+    Number(localStorage.getItem("bestTime")) || 0
+  );
 
   const resetFlippedCards = useFlippedStore((state) => state.resetFlippedCards);
   const resetHiddenCards = useHiddenStore((state) => state.resetHiddenCards);
   const setGameStarted = useGameStore((state) => state.setGameStarted);
   const gameStarted = useGameStore((state) => state.gameStarted);
+  const gameFinished = useGameStore((state) => state.gameFinished);
 
   const restartNewGame = () => {
     resetFlippedCards();
@@ -55,7 +63,6 @@ function App() {
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
       incrementTimer();
-      console.log("timer", timer);
     }, 1000);
   };
   const stopTimer = () => {
@@ -64,7 +71,6 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("gameStarted", gameStarted);
     if (!gameStarted) {
       if (timer !== 0) {
         stopTimer();
@@ -74,13 +80,43 @@ function App() {
     startTimer();
   }, [gameStarted]);
 
+  useEffect(() => {
+    if (gameFinished) {
+      const savedTime = localStorage.getItem("bestTime");
+      if (savedTime) {
+        localStorage.setItem(
+          "bestTime",
+          `${Math.min(timer, Number(savedTime))}`
+        );
+        setBestTime(Math.min(timer, Number(savedTime)));
+      } else {
+        localStorage.setItem("bestTime", `${timer}`);
+        setBestTime(timer);
+      }
+      stopTimer();
+    }
+  }, [gameFinished]);
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
+    const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    return `${minutesStr}:${secondsStr}`;
+  };
+
+  const formattedCurrentTime = formatTime(timer);
+  const formattedBestTime = formatTime(bestTime);
+
   return (
     <>
       <Header />
       <div className="py-4 px-7 md:px-9 md:py-6 flex justify-between items-center">
         <RestartButton onClick={restartNewGame} />
-        <TimeCounter />
-        <span>{timer}</span>
+        <TimeCounter
+          currentTime={formattedCurrentTime}
+          bestTime={formattedBestTime}
+        />
       </div>
       <Game cardsArr={cards} />
       <Footer />

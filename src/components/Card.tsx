@@ -43,9 +43,7 @@ export const Card = ({ itemIndex, src, pictureId }: ICardProps) => {
           transform: isFlipped ? "rotateY( 180deg )" : "rotateY(0)",
         }}
       >
-        <div className="absolute inset-0 bg-cardBack hover:bg-[#CAA5AF] active:bg-[#C992A9] transition-colors ease-in-out duration-200 h-full w-full rounded-xl [backfaceVisibility:hidden] px-2 py-4">
-          {pictureId}
-        </div>
+        <div className="absolute inset-0 bg-cardBack hover:bg-[#CAA5AF] active:bg-[#C992A9] transition-colors ease-in-out duration-200 h-full w-full rounded-xl [backfaceVisibility:hidden] px-2 py-4"></div>
         <div className="absolute inset-0 bg-violet-200 h-full w-full rounded-xl [backfaceVisibility:hidden] [transform:rotateY(180deg)] px-2 py-4">
           <img src={src} alt="" className="object-contain w-full h-full" />
         </div>

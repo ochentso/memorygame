@@ -10,6 +10,7 @@ export default {
         textGhost: "#FFF7EA",
         dustyRose: "#DDBDB3",
         cardBack: "#CEB2BA",
+        bgYellow: "#fbeeda",
       },
     },
 

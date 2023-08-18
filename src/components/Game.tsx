@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "./Card";
 import { create } from "zustand";
 import { useGameStore } from "../App";
+import WinModal from "./WinModal";
+import { createPortal } from "react-dom";
 
 interface ICard {
   index: number;
@@ -49,7 +51,8 @@ export const Game: React.FC<IGameProps> = ({ cardsArr }) => {
   const setGameStarted = useGameStore((state) => state.setGameStarted);
   const gameStarted = useGameStore((state) => state.gameStarted);
   const setGameFinished = useGameStore((state) => state.setGameFinished);
-  // const gameFinished = useGameStore((state) => state.gameFinished);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const compareFlippedCards = () => {
     if (!gameStarted && !!flippedCards.length) setGameStarted(true);
@@ -62,7 +65,7 @@ export const Game: React.FC<IGameProps> = ({ cardsArr }) => {
           addHiddenCard(secondCard);
           if (hiddenCards.length + 2 === cardsArr.length) {
             setGameFinished(true);
-            alert("You won!");
+            setIsModalOpen(true);
           }
         }, 500);
       }
@@ -86,6 +89,11 @@ export const Game: React.FC<IGameProps> = ({ cardsArr }) => {
           pictureId={card.pictureId}
         />
       ))}
+      {isModalOpen &&
+        createPortal(
+          <WinModal onClose={() => setIsModalOpen(false)} />,
+          document.body
+        )}
     </div>
   );
 };

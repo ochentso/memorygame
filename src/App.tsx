@@ -25,16 +25,20 @@ export const useGameStore = create<IGameStore>((set) => ({
   setGameFinished: (value) => set(() => ({ gameFinished: value })),
 }));
 
-const useTimerStore = create<ITimerStore>((set) => ({
+export const useTimerStore = create<ITimerStore>((set) => ({
   timer: 0,
   incrementTimer: () => set((state) => ({ timer: state.timer + 1 })),
   resetTimer: () => set(() => ({ timer: 0 })),
+  lastTime: "",
+  setLastTime: (value) => set(() => ({ lastTime: value })),
 }));
 
 interface ITimerStore {
   timer: number;
   incrementTimer: () => void;
   resetTimer: () => void;
+  lastTime: string;
+  setLastTime: (value: string) => void;
 }
 
 function App() {
@@ -48,6 +52,7 @@ function App() {
   const setGameStarted = useGameStore((state) => state.setGameStarted);
   const gameStarted = useGameStore((state) => state.gameStarted);
   const gameFinished = useGameStore((state) => state.gameFinished);
+  const setLastTime = useTimerStore((state) => state.setLastTime);
 
   const restartNewGame = () => {
     resetFlippedCards();
@@ -83,6 +88,7 @@ function App() {
   useEffect(() => {
     if (gameFinished) {
       const savedTime = localStorage.getItem("bestTime");
+      setLastTime(formatTime(timer));
       if (savedTime) {
         localStorage.setItem(
           "bestTime",

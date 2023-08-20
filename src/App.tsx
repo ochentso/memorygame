@@ -1,6 +1,5 @@
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
-import { RestartButton } from "./components/RestartButton";
 import { Game, useFlippedStore, useHiddenStore } from "./components/Game";
 import { picturesSet } from "./consts";
 import { useEffect, useRef, useState } from "react";
@@ -114,9 +113,6 @@ function App() {
       stopTimer();
     }
   }, [gameFinished]);
-
-  // const formattedCurrentTime = formatTime(timer);
-  // const formattedBestTime = formatTime(bestTime);
 
   return (
     <>

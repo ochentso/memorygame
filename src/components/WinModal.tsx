@@ -9,12 +9,12 @@ const WinModal = ({ onClose }: WinModalProps) => {
   const lastTime = useTimerStore((state) => state.lastTime);
   return (
     <>
-      <div className="fixed z-50 bottom-1/2 right-1/2 translate-x-2/4 translate-y-1/2 flex flex-col items-center pb-6 pt-8 px-6 rounded-xl bg-bgYellow w-fit">
+      <div className="fixed z-50 bottom-1/2 right-1/2 translate-x-2/4 translate-y-1/2 flex flex-col items-center pb-6 pt-8 px-6 rounded-xl bg-bgYellow w-max">
         <button onClick={onClose} className=" absolute top-1 right-1">
           <CloseIcon />
         </button>
         <div className="flex justify-between gap-14">
-          <span className=" text-mainPurple font-bold text-4xl">
+          <span className=" text-mainPurple font-bold text-4xl text-center">
             You win!🎉
           </span>
         </div>

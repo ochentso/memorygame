@@ -64,11 +64,13 @@ function App() {
   const gameFinished = useGameStore((state) => state.gameFinished);
   const setLastTime = useTimerStore((state) => state.setLastTime);
   const setBestTime = useTimerStore((state) => state.setBestTime);
+  const setGameFinished = useGameStore((state) => state.setGameFinished);
 
   const restartNewGame = () => {
     resetFlippedCards();
     resetHiddenCards();
     setGameStarted(false);
+    setGameFinished(false);
     setCards(picsDuplicate.sort(() => Math.random() - 0.5));
   };
 
